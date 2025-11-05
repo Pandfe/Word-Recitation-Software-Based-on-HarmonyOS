@@ -1,11 +1,31 @@
 import { promptAction } from "@kit.ArkUI"
 
-
 @Component
 export struct MyOptions {
   // 用户信息
   @State username: string = '张三'
   @State isLoggedIn: boolean = true
+  @State loginTime: string = '' // 存储登录时间
+
+  aboutToAppear() {
+    // 组件初始化时，如果有登录状态，设置登录时间
+    if (this.isLoggedIn) {
+      this.setLoginTime()
+    }
+  }
+
+  // 设置登录时间的方法
+  setLoginTime() {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = (now.getMonth() + 1).toString().padStart(2, '0')
+    const day = now.getDate().toString().padStart(2, '0')
+    const hours = now.getHours().toString().padStart(2, '0')
+    const minutes = now.getMinutes().toString().padStart(2, '0')
+    const seconds = now.getSeconds().toString().padStart(2, '0')
+
+    this.loginTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+  }
 
   build() {
     Column() {
@@ -28,6 +48,14 @@ export struct MyOptions {
           .margin({
             top: 20
           })
+
+        // 显示登录时间
+        if (this.isLoggedIn && this.loginTime) {
+          Text(`登录时间: ${this.loginTime}`)
+            .fontSize(14)
+            .fontColor('#666666')
+            .margin({ top: 8 })
+        }
       }
       .width('100%')
       .height('50%')
@@ -129,6 +157,7 @@ export struct MyOptions {
                       // 退出登录
                       this.isLoggedIn = false
                       this.username = '未登录'
+                      this.loginTime = '' // 清空登录时间
 
                       promptAction.showToast({
                         message: '已退出登录',
@@ -154,6 +183,8 @@ export struct MyOptions {
                 // 模拟登录
                 this.isLoggedIn = true
                 this.username = '张三'
+                this.setLoginTime() // 设置登录时间
+
                 promptAction.showToast({
                   message: '登录成功',
                   duration: 2000,
