@@ -43,7 +43,7 @@ struct Index {
       Stack({ alignContent: Alignment.Bottom }) {
         // 页面内容区域
         if (this.currentIndex == 0) {
-          Answer()
+          Answer({ whichWord: $whichWord })
             .transition({
               type: TransitionType.All,
               scale: {
@@ -54,7 +54,7 @@ struct Index {
 
 
         } else if (this.currentIndex == 1) {
-          WordList( {whichWord: $whichWord} )
+          WordList({ whichWord: $whichWord })
             .transition({
               type: TransitionType.All,
               scale: {
