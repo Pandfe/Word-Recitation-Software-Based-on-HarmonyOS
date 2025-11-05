@@ -1,6 +1,5 @@
 import { promptAction } from "@kit.ArkUI"
 
-
 interface WhichWord {
   word: string // 单词
   answers: string[] // 答案选项
@@ -13,35 +12,26 @@ export struct Answer {
   @Link whichWord: WhichWord
 
   // 状态变量
-  // 准确率
   @State accuracy: number = 0
-  // 速度
   @State progress: number = 0
-  // 单词个数
   @State count: number = 10
-  // 用时
   @State time: string = '00:00:00:00'
-  // 是否开始测试
   @State isStarted: boolean = false
-  // 选中的答案
   @State selectedAnswer: string = ''
 
   build() {
     Column() {
-      // 顶部统计信息区域
+      // 顶部统计信息区域 - 简单优化
       List() {
         // 准确率
         ListItem(){
           Row(){
-            // 左侧
             this.ListItemLeft($r('app.media.ic_right'), "准确率")
             Blank()
-
-            // 右侧
             Text(`${this.accuracy}%`)
               .width(100)
               .textAlign(TextAlign.Center)
-
+              .fontColor('#1F2937') // 深灰色文字
           }
           .width('90%')
         }
@@ -51,17 +41,15 @@ export struct Answer {
         // 进度
         ListItem(){
           Row(){
-            // 左侧
             this.ListItemLeft($r('app.media.ic_progress'), "进度")
             Blank()
-
-            // 右侧
             Progress({
               value: this.progress,
               total: 100,
               type: ProgressType.Linear
             })
               .width(100)
+              .color('#667EEA') // 和谐蓝色
           }
           .width('90%')
         }
@@ -71,17 +59,13 @@ export struct Answer {
         // 个数
         ListItem(){
           Row(){
-            // 左侧
             this.ListItemLeft($r('app.media.ic_num'), "个数")
             Blank()
-
-            // 右侧
             Button(`${this.count}`)
               .width(100)
               .height(30)
-              .fontColor('#000')
-              .backgroundColor('#EBEBEB')
-
+              .fontColor('#1F2937') // 深灰色文字
+              .backgroundColor('#F3F4F6') // 浅灰色背景
           }
           .width('90%')
         }
@@ -91,87 +75,76 @@ export struct Answer {
         // 用时
         ListItem(){
           Row(){
-            // 左侧
             this.ListItemLeft($r('app.media.ic_time'), "用时")
             Blank()
-
-            // 右侧
-            Text(`${this.time}%`)
+            Text(this.time) // 移除多余的%符号
               .width(100)
               .textAlign(TextAlign.Center)
-
+              .fontColor('#1F2937') // 深灰色文字
           }
           .width('90%')
         }
         .width('100%')
         .height('25%')
-
       }
       .width('90%')
       .height(150)
       .borderRadius(10)
-      .margin({
-        top: 40
-      })
+      .margin({ top: 40 })
       .backgroundColor(Color.White)
+      .shadow({ // 添加柔和阴影
+        radius: 4,
+        color: '#F3F4F6',
+        offsetX: 0,
+        offsetY: 2
+      })
 
-      // 单词展示区域
+      // 单词展示区域 - 简单优化
       Column() {
-        // 单词
         Text(this.whichWord.word)
           .fontSize(40)
           .fontWeight(FontWeight.Bold)
           .textAlign(TextAlign.Center)
+          .fontColor('#1F2937') // 深灰色文字
 
-        // 例句
         if (this.whichWord.example) {
           Text(this.whichWord.example)
-            .fontColor(Color.Gray)
-            .margin({
-              top: 15
-            })
+            .fontColor('#6B7280') // 浅灰色文字
+            .margin({ top: 15 })
             .textAlign(TextAlign.Center)
         }
       }
       .width('90%')
-      .margin({
-        top: 40
-      })
+      .margin({ top: 40 })
 
-      // 选项按钮区域
-      Column({
-        space: 10
-      }) {
-        // 使用ForEach循环渲染选项按钮
+      // 选项按钮区域 - 简单优化
+      Column({ space: 10 }) {
         ForEach(this.whichWord.answers, (item: string, index: number) => {
           Button(item)
             .type(ButtonType.Normal)
             .width('100%')
             .borderRadius(10)
-            .fontColor(this.selectedAnswer === item ? Color.White : Color.Black)
-            .backgroundColor(this.selectedAnswer === item ? '#0491d1' : Color.White)
+            .fontColor(this.selectedAnswer === item ? Color.White : '#1F2937') // 深灰色文字
+            .backgroundColor(this.selectedAnswer === item ? '#667EEA' : Color.White) // 和谐蓝色
             .onClick(() => {
               if (this.isStarted) {
                 this.selectedAnswer = item
-                // 判断答案是否正确
                 if (item === this.whichWord.answers[0]) {
-                  // 正确答案通常是数组的第一个元素
                   this.accuracy = Math.min(100, this.accuracy + 10)
                   this.progress = Math.min(100, this.progress + 10)
-
                   promptAction.showToast({
                     message: '回答正确！',
                     duration: 2000,
                     bottom: 100
                   })
-                } else{
+                } else {
                   promptAction.showToast({
                     message: '回答错误，请再试一次',
                     duration: 2000,
                     bottom: 100
                   })
                 }
-              } else{
+              } else {
                 promptAction.showToast({
                   message: '请先点击"开始测试"按钮',
                   duration: 2000,
@@ -182,36 +155,30 @@ export struct Answer {
         })
       }
       .width('70%')
-      .margin({
-        top: 40
-      })
+      .margin({ top: 40 })
 
-      // 底部操作按钮
-      Row(){
-        // 结束测试按钮
+      // 底部操作按钮 - 简单优化
+      Row() {
         Button('结束测试')
           .borderWidth(1)
-          .borderColor(Color.Gray)
-          .fontColor(Color.Gray)
+          .borderColor('#D1D5DB') // 和谐灰色
+          .fontColor('#6B7280') // 和谐灰色
           .backgroundColor(Color.Transparent)
           .onClick(() => {
             if (this.isStarted) {
-              // 弹出确认对话框
               AlertDialog.show({
                 title: '温馨提示',
                 message: '结束测试无法记录打卡，是否结束？',
                 primaryButton: {
                   value: '结束',
-                  fontColor: '#ffe31313',
+                  fontColor: '#EF4444', // 和谐红色
                   backgroundColor: '#fff',
                   action: () => {
-                    // 重置状态
                     this.isStarted = false
                     this.selectedAnswer = ''
                     this.accuracy = 0
                     this.progress = 0
                     this.time = '00:00:00:00'
-
                     promptAction.showToast({
                       message: '已结束测试',
                       duration: 2000,
@@ -221,17 +188,12 @@ export struct Answer {
                 },
                 secondaryButton: {
                   value: '取消',
-                  fontColor: '#ff1366e3',
+                  fontColor: '#667EEA', // 和谐蓝色
                   backgroundColor: '#fff',
-                  action: () => {
-                    // 取消操作，不做任何处理
-                  }
+                  action: () => {}
                 },
                 alignment: DialogAlignment.Center,
-                offset: {
-                  dx: 0,
-                  dy: -20
-                }
+                offset: { dx: 0, dy: -20 }
               })
             } else {
               promptAction.showToast({
@@ -242,18 +204,14 @@ export struct Answer {
             }
           })
 
-        // 开始测试按钮
         Button(this.isStarted ? '继续测试' : '开始测试')
-          .backgroundColor(Color.Black)
+          .backgroundColor('#667EEA') // 和谐蓝色
+          .fontColor(Color.White)
           .onClick(() => {
             if (!this.isStarted) {
               this.isStarted = true
               this.selectedAnswer = ''
-
-              // 启动计时器（实际项目中可以使用定时器更新时间）
-              // 这里简单模拟
               this.time = '00:00:00:01'
-
               promptAction.showToast({
                 message: '请选择答案',
                 duration: 2000,
@@ -271,7 +229,8 @@ export struct Answer {
       .width('80%')
       .justifyContent(FlexAlign.SpaceBetween)
       .margin({
-        top: 40
+        top: 40,
+        bottom: 80  // 增加底部边距，确保不被导航栏遮挡
       })
     }
     .width('100%')
@@ -289,10 +248,8 @@ export struct Answer {
         .width(20)
         .height(20)
       Text(title)
-        .padding({
-          left: 5
-        })
+        .padding({ left: 5 })
+        .fontColor('#6B7280') // 浅灰色文字
     }
   }
-
 }

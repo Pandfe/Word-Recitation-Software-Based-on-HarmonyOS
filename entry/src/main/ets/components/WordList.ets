@@ -11,9 +11,6 @@ interface WhichWord {
   answers: string[] // 答案选项
   example?: string // 例句（可选）
 }
-
-
-
 @Component
 export struct WordList {
 
@@ -83,20 +80,21 @@ export struct WordList {
                 .height(120)
                 .objectFit(ImageFit.Contain)
                 .borderRadius({
-                  topLeft: 5,
-                  topRight: 5
+                  topLeft: 8,  // 稍微增加圆角
+                  topRight: 8
                 })
               // 单词文本
               Text(item.word)
                 .height(60)
                 .fontSize(14)
-                .fontWeight(600)
+                .fontWeight(FontWeight.Medium)  // 使用标准字重
                 .textAlign(TextAlign.Center)
                 .lineHeight(22)
                 .padding({
                   left: 10,
                   right: 10
                 })
+                .fontColor('#1F2937')  // 深灰色文字
               // 底部操作区
               Row(){
                 // 分享按钮
@@ -108,7 +106,7 @@ export struct WordList {
                     .borderRadius(8)
                   Text('分享')
                     .fontSize(10)
-                    .fontColor('#999')
+                    .fontColor('#6B7280')  // 浅灰色文字
                 }
                 .layoutWeight(1)
                 // 打卡按钮
@@ -120,7 +118,7 @@ export struct WordList {
                     .borderRadius(8)
                   Text('打卡')
                     .fontSize(10)
-                    .fontColor('#999')
+                    .fontColor('#6B7280')  // 浅灰色文字
                 }
               }
               .padding({
@@ -133,9 +131,15 @@ export struct WordList {
             .padding({
               bottom: 15
             })
-            .backgroundColor(Color.White)
-            .borderRadius(5)
+            .backgroundColor('#FFFFFF')  // 白色背景
+            .borderRadius(8)  // 稍微增加圆角
             .margin('2.5%')
+            .shadow({  // 添加柔和阴影
+              radius: 4,
+              color: '#F3F4F6',
+              offsetX: 0,
+              offsetY: 2
+            })
             .onClick(() => {
               console.info(`[WordCheckIn] Selected word: ${item.word}`)
               this.whichWord = {
@@ -144,7 +148,6 @@ export struct WordList {
                 example: item.example
               }
             })
-
           })
         }
         .width('100%')
@@ -154,10 +157,11 @@ export struct WordList {
     .width('100%')
     .height('100%')
     .padding(10)
-    .backgroundImage($r('app.media.img_bg'))
+    .backgroundImage($r('app.media.img_bg'))  // 恢复背景图
     .backgroundImageSize({
       width: '100%',
       height: '100%'
     })
+    .padding({ bottom: 20 })  // 增加底部内边距
   }
 }

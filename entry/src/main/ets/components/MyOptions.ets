@@ -29,41 +29,44 @@ export struct MyOptions {
     Column() {
       // 顶部个人信息区域 - 轻微优化
       Column() {
-        // 用户头像 - 添加圆角和边框
+        // 用户头像 - 和谐美学调整
         Image($r('app.media.img_avatar'))
-          .width(100)
-          .height(100)
-          .borderRadius(50)
-          .border({ width: 3, color: '#5D8AA8' })
-          .margin({ top: 120 })
+          .width(80)
+          .height(80)
+          .borderRadius(40)
+          .border({ width: 3, color: '#667EEA' }) // 改为和谐蓝色
+          .margin({ top: 40 })
 
         // 用户名
         Text(this.username)
-          .fontSize(18)
+          .fontSize(20)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#2C3E50') // 改为深灰色
-          .margin({ top: 20 })
+          .fontColor('#1F2937') // 深灰色
+          .margin({ top: 16 })
 
         // 显示登录时间
         if (this.isLoggedIn && this.loginTime) {
           Text(`登录时间: ${this.loginTime}`)
-            .fontSize(14)
-            .fontColor('#7F8C8D') // 改为浅灰色
+            .fontSize(12)
+            .fontColor('#6B7280') // 浅灰色
             .margin({ top: 8 })
+            .padding(8)
+            .backgroundColor('#F3F4F6') // 添加浅灰背景
+            .borderRadius(8)
         }
       }
       .width('100%')
-      .height('50%')
+      .height('40%')
       .backgroundImage($r('app.media.img_avatar'))
       .backgroundImageSize({
         width: '100%',
         height: '100%'
       })
-      .backgroundBlurStyle(BlurStyle.Regular)
+      .backgroundBlurStyle(BlurStyle.Thin) // 改为更细的模糊
 
-      // 底部选项列表区域 - 轻微优化
+      // 底部选项列表区域 - 和谐美学调整
       Column({
-        space: 12 // 稍微增加间距
+        space: 12
       }) {
         // 打卡记录选项
         Row() {
@@ -76,13 +79,10 @@ export struct MyOptions {
             .mineImageStyle()
         }
         .mineItemStyle()
-        .backgroundColor('#FFFFFF') // 添加白色背景
-        .borderRadius(12) // 添加圆角
         .onClick(() => {
           promptAction.showToast({
             message: '打卡记录功能开发中...',
-            duration: 2000,
-            bottom: 100
+            duration: 2000
           })
         })
 
@@ -97,13 +97,10 @@ export struct MyOptions {
             .mineImageStyle()
         }
         .mineItemStyle()
-        .backgroundColor('#FFFFFF') // 添加白色背景
-        .borderRadius(12) // 添加圆角
         .onClick(() => {
           promptAction.showToast({
             message: '当前已是最新版本',
-            duration: 2000,
-            bottom: 100
+            duration: 2000
           })
         })
 
@@ -118,14 +115,13 @@ export struct MyOptions {
             .mineImageStyle()
         }
         .mineItemStyle()
-        .backgroundColor('#FFFFFF') // 添加白色背景
-        .borderRadius(12) // 添加圆角
         .onClick(() => {
           AlertDialog.show({
             title: '关于单词背诵软件',
             message: '单词背诵 v1.0.0\n一个帮助您学习英语单词的应用\n@2025',
             confirm: {
               value: '确定',
+              fontColor: '#667EEA', // 改为和谐蓝色
               action: () => {
                 console.info('点击了确定')
               }
@@ -136,95 +132,86 @@ export struct MyOptions {
 
         Blank()
 
-        // 退出登录按钮 - 优化样式
+        // 退出登录按钮 - 和谐美学调整
         Row() {
           Button(this.isLoggedIn ? '退出登录' : '登录')
             .width('100%')
-            .height(44) // 固定高度
-            .margin({
-              bottom: 150
-            })
-            .backgroundColor(this.isLoggedIn ? '#95a5a6' : '#5D8AA8') // 使用和谐的颜色
-            .fontColor(Color.White)
-            .borderRadius(22) // 圆角按钮
+            .height(48)
+            .backgroundColor(this.isLoggedIn ? '#FEF2F2' : '#667EEA') // 和谐配色
+            .fontColor(this.isLoggedIn ? '#EF4444' : '#FFFFFF')
+            .borderRadius(24)
             .fontSize(16)
             .fontWeight(FontWeight.Medium)
+            .shadow({
+              radius: 8,
+              color: this.isLoggedIn ? '#FECACA' : '#C3DAFE',
+              offsetX: 0,
+              offsetY: 2
+            })
             .onClick(() => {
               if (this.isLoggedIn) {
-                // 弹出确认对话框
                 AlertDialog.show({
                   title: '温馨提示',
                   message: '退出登录无法打卡，是否退出？',
                   primaryButton: {
                     value: '退出',
-                    fontColor: '#e74c3c', // 使用红色
-                    backgroundColor: '#fff',
+                    fontColor: '#EF4444', // 和谐红色
+                    backgroundColor: '#FFFFFF',
                     action: () => {
-                      // 退出登录
                       this.isLoggedIn = false
                       this.username = '未登录'
                       this.loginTime = ''
 
                       promptAction.showToast({
                         message: '已退出登录',
-                        duration: 2000,
-                        bottom: 100
+                        duration: 2000
                       })
                     }
-                  },secondaryButton: {
+                  },
+                  secondaryButton: {
                     value: '取消',
-                    fontColor: '#5D8AA8', // 使用主色调
-                    backgroundColor: '#fff',
-                    action: () => {
-                      // 取消操作，不做任何处理
-                    }
+                    fontColor: '#667EEA', // 和谐蓝色
+                    backgroundColor: '#FFFFFF',
+                    action: () => {}
                   },
                   alignment: DialogAlignment.Center,
-                  offset: {
-                    dx: 0,
-                    dy: -20
-                  }
+                  offset: { dx: 0, dy: -20 }
                 })
               } else {
-                // 模拟登录
                 this.isLoggedIn = true
                 this.username = '张三'
                 this.setLoginTime()
                 promptAction.showToast({
                   message: '登录成功',
-                  duration: 2000,
-                  bottom: 100
+                  duration: 2000
                 })
               }
-
             })
         }
-
+        .width('100%')
+        .padding(16)
       }
       .width('100%')
       .height('60%')
-      .offset({
-        y: '-10%'
-      })
+      .offset({ y: '-10%' })
       .borderRadius({
-        topLeft: 30, // 增加圆角
-        topRight: 30
+        topLeft: 24,
+        topRight: 24
       })
-      .backgroundColor('#F8F9FA') // 改为浅灰色背景
+      .backgroundColor('#F8F9FA')
       .padding({
-        top: 30,
-        left: 20, // 调整内边距
+        top: 24,
+        left: 20,
         right: 20
       })
-
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F8F9FA') // 整体背景色
+    .backgroundColor('#F8F9FA')
   }
 }
 
-// 使用@Extend扩展组件样式
+// 使用@Extend扩展组件样式 - 和谐美学调整
 @Extend(Image) function mineImageStyle() {
   .width(24)
   .height(24)
@@ -234,18 +221,20 @@ export struct MyOptions {
   .height(24)
   .fontSize(16)
   .fontWeight(FontWeight.Medium)
-  .margin({
-    left: '20px'
-  })
+  .fontColor('#1F2937') // 深灰色
+  .margin({ left: 16 })
 }
 
 @Extend(Row) function mineItemStyle() {
   .width('100%')
-  .height(50) // 增加高度
-  .padding({
-    top: 8,
-    bottom: 8,
-    left: 16, // 增加左右内边距
-    right: 16
+  .height(56)
+  .padding(16)
+  .backgroundColor('#FFFFFF')
+  .borderRadius(16)
+  .shadow({
+    radius: 8,
+    color: '#F3F4F6',
+    offsetX: 0,
+    offsetY: 2
   })
 }
