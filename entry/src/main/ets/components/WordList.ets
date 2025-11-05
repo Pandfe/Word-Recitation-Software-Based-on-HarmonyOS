@@ -18,7 +18,7 @@ export struct WordList {
   @State arrWords: ArrWordsItem[] = [
     {
       img: $r('app.media.img_run'),
-      word: "run | running | runs",
+      word: "run | running ",
       answers: ["跑", "不跑", "慢跑", "快跑"],
       example: "I like to run in the morning."
     },
